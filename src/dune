@@ -1,0 +1,16 @@
+(library
+  (name controller)
+  (modules controller)
+  (libraries
+    core
+    opium
+    tyxml)
+  (preprocess (pps ppx_deriving_yojson)))
+
+
+(executable
+  (name note_app)
+  (modules note_app)
+  (libraries
+    controller)
+  (preprocess (pps ppx_deriving_yojson)))
