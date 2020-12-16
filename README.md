@@ -44,6 +44,12 @@ like Postgres rather than storing them locally.
 
 ### Setup
 
+Before beginning, install sqlite3:
+
+```bash
+sudo apt install sqlite3
+```
+
 Download the code and place it in a new folder. Within this folder, create an opam switch:
 
 ```bash
@@ -70,10 +76,10 @@ opam install . --deps-only
 ```
 
 If you get an error saying some packages couldn't be installed due to a missing system
-dependency from `libev-dev`, install it and try again:
+dependency from `libev-dev` or from `libsqlite3-dev`, install them and try again:
 
 ```bash
-sudo apt install libev-dev
+sudo apt install libev-dev libsqlite3-dev
 opam install . --deps-only
 ```
 

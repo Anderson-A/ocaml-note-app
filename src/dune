@@ -1,16 +1,25 @@
 (library
+  (name persistence)
+  (modules persistence)
+  (libraries
+    core
+    sqlite3)
+  (preprocess (pps ppx_deriving_yojson)))
+
+(library
   (name controller)
   (modules controller)
   (libraries
     core
     opium
-    tyxml)
+    tyxml
+    persistence)
   (preprocess (pps ppx_deriving_yojson)))
-
 
 (executable
   (name note_app)
   (modules note_app)
   (libraries
+    persistence
     controller)
   (preprocess (pps ppx_deriving_yojson)))

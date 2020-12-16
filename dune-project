@@ -17,6 +17,7 @@
     (opium (>= 0.20.0))
     (tyxml (>= 4.4.0))
     (ppx_deriving_yojson (>= 3.6.1))
+    (sqlite3 (>= 5.0.2))
 
 
     (merlin :dev)

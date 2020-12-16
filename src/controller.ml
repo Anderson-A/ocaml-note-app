@@ -3,9 +3,6 @@ open Opium
 open Tyxml.Html
 
 
-type note = { id: int; title: string; content: string; path: string} [@@deriving yojson]
-
-
 let gen_html elem =
   (html
     (head
@@ -49,12 +46,3 @@ let hello_world req =
     (h1 [ txt ("Hello, "^name) ])
   in
   Lwt.return (Response.of_html content)
-
-
-let run_server _ =
-  App.empty
-  |> App.get "/hello/:name" hello_world
-  |> App.put "/notes/:id" update_note_handler
-  |> App.get "/notes" get_all_notes_handler
-  |> App.get "/notes/:id" get_note_handler
-  |> App.run_command
