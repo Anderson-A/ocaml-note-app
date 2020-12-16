@@ -7,13 +7,23 @@
   (preprocess (pps ppx_deriving_yojson)))
 
 (library
+  (name content)
+  (modules content)
+  (libraries
+    core
+    tyxml
+    persistence)
+  (preprocess (pps ppx_deriving_yojson)))
+
+(library
   (name controller)
   (modules controller)
   (libraries
     core
     opium
     tyxml
-    persistence)
+    persistence
+    content)
   (preprocess (pps ppx_deriving_yojson)))
 
 (executable

@@ -1,6 +1,8 @@
 open Core
 open Opium
 open Tyxml.Html
+open Persistence
+open Content
 
 
 let gen_html elem =
@@ -17,13 +19,19 @@ let gen_html elem =
 
 
 let get_all_notes_handler _ =
+  let all_notes = get_all_notes () in
+  let html_content = all_notes_page all_notes in
+  Lwt.return (Response.of_html ~indent:true html_content)
+
+
+(* let get_all_notes_handler _ =
   let notes = ["Class notes"; "Shopping list"; "Journal"] in
   let content = gen_html
     (div
       (List.map notes ~f:(fun x -> div [txt x]))
     )
   in
-  Lwt.return (Response.of_html ~indent:true content)
+  Lwt.return (Response.of_html ~indent:true content) *)
 
 
 let get_note_handler req =

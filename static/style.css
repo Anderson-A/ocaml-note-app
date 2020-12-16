@@ -1,0 +1,21 @@
+.header {
+  text-align: center;
+  padding: 10px;
+}
+
+.content {
+  text-align: center;
+  width: 50%;
+  margin: auto;
+}
+
+.note {
+  background: #f4f4f4;
+  border: solid;
+  margin: 20px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.5em;
+}

@@ -60,31 +60,19 @@ let gather_notes (l: notes) (data: Sqlite3.Data.t array): notes =
   l @ [curr]
 
 
-let get_note (id: int): Yojson.Safe.t =
+let get_note (id: int): note =
   let select_query = Sqlite3.prepare
     notes_db
     (Printf.sprintf "SELECT * FROM Notes WHERE NoteId=%d;" id)
   in
   let _, queried = Sqlite3.fold select_query ~f:gather_notes ~init:[] in
-  note_to_yojson (List.hd_exn queried)
+  List.hd_exn queried
 
 
-let get_all_notes (): Yojson.Safe.t =
+let get_all_notes (): notes =
   let select_query = Sqlite3.prepare notes_db "SELECT * FROM Notes;" in
   let _, queried = Sqlite3.fold select_query ~f:gather_notes ~init:[] in
-  notes_to_yojson queried
-
-
-let delete_note (id: int): bool =
-  let delete_query = Printf.sprintf "DELETE FROM Notes WHERE NoteId=%d;" id in
-  match Sqlite3.exec notes_db delete_query with
-  | Sqlite3.Rc.OK ->
-    Printf.printf "Deleted note with id %d\n" id;
-    true
-  | r ->
-    print_endline (Sqlite3.Rc.to_string r);
-    print_endline (Sqlite3.errmsg notes_db);
-    false
+  queried
 
 
 let create_note (title: string) (content: string): bool =
@@ -103,6 +91,23 @@ let create_note (title: string) (content: string): bool =
     false
 
 
+let delete_note (id: int): bool =
+  let delete_query = Printf.sprintf "DELETE FROM Notes WHERE NoteId=%d;" id in
+  match Sqlite3.exec notes_db delete_query with
+  | Sqlite3.Rc.OK ->
+    if Sqlite3.changes notes_db = 0 then (
+      Printf.printf "Note with id %d does not exist\n" id;
+      false
+    ) else (
+      Printf.printf "Deleted note with id %d\n" id;
+      true
+    )
+  | r ->
+    print_endline (Sqlite3.Rc.to_string r);
+    print_endline (Sqlite3.errmsg notes_db);
+    false
+
+
 let update_note (id: int) (title: string) (content: string): bool =
   let update_query = Printf.sprintf
     "UPDATE Notes SET Title=%s, Content=%s WHERE NoteId=%d;"
@@ -112,8 +117,13 @@ let update_note (id: int) (title: string) (content: string): bool =
   in
   match Sqlite3.exec notes_db update_query with
   | Sqlite3.Rc.OK ->
-    Printf.printf "Updated note with id %d\n" id;
-    true
+    if Sqlite3.changes notes_db = 0 then (
+      Printf.printf "Note with id %d does not exist\n" id;
+      false
+    ) else (
+      Printf.printf "Updated note with id %d\n" id;
+      true
+    )
   | r ->
     print_endline (Sqlite3.Rc.to_string r);
     print_endline (Sqlite3.errmsg notes_db);
