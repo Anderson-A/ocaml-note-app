@@ -24,22 +24,22 @@ let get_all_notes_handler _ =
   Lwt.return (Response.of_html ~indent:true html_content)
 
 
-(* let get_all_notes_handler _ =
-  let notes = ["Class notes"; "Shopping list"; "Journal"] in
-  let content = gen_html
-    (div
-      (List.map notes ~f:(fun x -> div [txt x]))
-    )
-  in
-  Lwt.return (Response.of_html ~indent:true content) *)
-
-
 let get_note_handler req =
   let note_id = Router.param req "id" in
   let content = gen_html
     (div [txt ("This is note "^note_id)])
   in
   Lwt.return (Response.of_html ~indent:true content)
+
+
+let delete_note_handler req =
+  let note_id = Router.param req "id" in
+  let deleted = delete_note note_id in
+  let json_res =
+    if deleted then (`Assoc [ "deleted", `Bool (true)])
+    else (`Assoc [ "deleted", `Bool (false)])
+  in
+  Lwt.return (Response.of_json json_res)
 
 
 let update_note_handler req =

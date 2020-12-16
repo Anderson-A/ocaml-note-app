@@ -33,9 +33,10 @@ let chop_content (s: string): string =
 
 let gen_note_div (n: Persistence.note) =
   let open Html in
-  div ~a:[a_class ["note"]; a_id (Int.to_string n.id); a_onclick "open_note(this);"] [
-    p ~a:[a_class ["title"]] [txt (n.title)];
-    p [txt (chop_content n.content)]
+  div ~a:[a_class ["note"]; a_id n.id] [
+    p ~a:[a_class ["title"]] [a ~a:[a_href ("/notes/"^n.id)] [txt n.title]];
+    p [ txt (chop_content n.content)
+      ; button ~a:[a_class ["delete_btn"]; a_onclick "delete_note(this)"] [txt "x"]]
   ]
 
 

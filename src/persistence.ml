@@ -1,6 +1,6 @@
 open Core
 
-type note = { id: int; title: string; content: string } [@@deriving yojson]
+type note = { id: string; title: string; content: string } [@@deriving yojson]
 
 type notes = note list [@@deriving yojson]
 
@@ -53,17 +53,17 @@ let check_table () =
 
 
 let gather_notes (l: notes) (data: Sqlite3.Data.t array): notes =
-  let id = Int.of_string (Sqlite3.Data.to_string_coerce data.(0)) in
+  let id = Sqlite3.Data.to_string_coerce data.(0) in
   let title = Sqlite3.Data.to_string_coerce data.(1) in
   let content = Sqlite3.Data.to_string_coerce data.(2) in
   let curr = {id=id; title=title; content=content} in
   l @ [curr]
 
 
-let get_note (id: int): note =
+let get_note (id: string): note =
   let select_query = Sqlite3.prepare
     notes_db
-    (Printf.sprintf "SELECT * FROM Notes WHERE NoteId=%d;" id)
+    (Printf.sprintf "SELECT * FROM Notes WHERE NoteId=%s;" id)
   in
   let _, queried = Sqlite3.fold select_query ~f:gather_notes ~init:[] in
   List.hd_exn queried
@@ -91,15 +91,15 @@ let create_note (title: string) (content: string): bool =
     false
 
 
-let delete_note (id: int): bool =
-  let delete_query = Printf.sprintf "DELETE FROM Notes WHERE NoteId=%d;" id in
+let delete_note (id: string): bool =
+  let delete_query = Printf.sprintf "DELETE FROM Notes WHERE NoteId=%s;" id in
   match Sqlite3.exec notes_db delete_query with
   | Sqlite3.Rc.OK ->
     if Sqlite3.changes notes_db = 0 then (
-      Printf.printf "Note with id %d does not exist\n" id;
+      Printf.printf "Note with id %s does not exist\n" id;
       false
     ) else (
-      Printf.printf "Deleted note with id %d\n" id;
+      Printf.printf "Deleted note with id %s\n" id;
       true
     )
   | r ->
@@ -108,9 +108,9 @@ let delete_note (id: int): bool =
     false
 
 
-let update_note (id: int) (title: string) (content: string): bool =
+let update_note (id: string) (title: string) (content: string): bool =
   let update_query = Printf.sprintf
-    "UPDATE Notes SET Title=%s, Content=%s WHERE NoteId=%d;"
+    "UPDATE Notes SET Title=%s, Content=%s WHERE NoteId=%s;"
     title
     content
     id
@@ -118,10 +118,10 @@ let update_note (id: int) (title: string) (content: string): bool =
   match Sqlite3.exec notes_db update_query with
   | Sqlite3.Rc.OK ->
     if Sqlite3.changes notes_db = 0 then (
-      Printf.printf "Note with id %d does not exist\n" id;
+      Printf.printf "Note with id %s does not exist\n" id;
       false
     ) else (
-      Printf.printf "Updated note with id %d\n" id;
+      Printf.printf "Updated note with id %s\n" id;
       true
     )
   | r ->
