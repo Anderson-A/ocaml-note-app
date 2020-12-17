@@ -18,18 +18,17 @@ let gen_html elem =
   )
 
 
+let get_note_handler req =
+  let note_id = Router.param req "id" in
+  let fetched_note = get_note note_id in
+  let html_content = note_page fetched_note in
+  Lwt.return (Response.of_html ~indent:true html_content)
+
+
 let get_all_notes_handler _ =
   let all_notes = get_all_notes () in
   let html_content = all_notes_page all_notes in
   Lwt.return (Response.of_html ~indent:true html_content)
-
-
-let get_note_handler req =
-  let note_id = Router.param req "id" in
-  let content = gen_html
-    (div [txt ("This is note "^note_id)])
-  in
-  Lwt.return (Response.of_html ~indent:true content)
 
 
 let delete_note_handler req =
@@ -46,11 +45,3 @@ let update_note_handler req =
   let note_id = Router.param req "id" in
   Response.of_json (`Assoc [ "message", `String ("Note "^note_id^" saved")])
   |> Lwt.return
-
-
-let hello_world req =
-  let name = Router.param req "name" in
-  let content = gen_html
-    (h1 [ txt ("Hello, "^name) ])
-  in
-  Lwt.return (Response.of_html content)

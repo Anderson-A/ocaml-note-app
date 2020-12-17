@@ -47,3 +47,24 @@ let all_notes_page (all_notes: Persistence.notes) =
     div ~a:[a_class ["content"]] ((button [txt "Create Note"]) :: note_divs)
   in
   layout [main_script; main_header; content_div]
+
+
+let gen_editing_div (n: Persistence.note) =
+  let open Html in
+  div ~a:[a_id n.id] [
+    label ~a:[a_label_for "title_input"] [txt "Title"];
+    input ~a:[a_input_type `Text; a_name "title_input"; a_id "title_input"; a_maxlength 40; a_value n.title] ();
+    br (); br ();
+    textarea ~a:[a_id "content_input"; a_cols 50; a_rows 20] (txt n.content);
+    br (); br ();
+    button ~a:[a_class ["save_btn"]] [txt "Save Note"]
+  ]
+
+
+let note_page (n: Persistence.note) =
+  let editing_div = gen_editing_div n in
+  let open Html in
+  let content_div =
+    div ~a:[a_class ["content"]] [ editing_div ]
+  in
+  layout [main_script; main_header; content_div]
