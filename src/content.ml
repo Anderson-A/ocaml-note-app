@@ -77,3 +77,5 @@ let page_404 _ =
     div ~a:[a_class ["content"]] [ txt "Note does not exist" ]
   in
   layout [main_script; main_header; content_div]
+
+(* let mine = Format.asprintf "%a" (Html.pp_elt ()) main_header *)
