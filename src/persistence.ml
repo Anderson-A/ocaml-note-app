@@ -1,10 +1,8 @@
 open Core
 
-[@@@coverage off]
-type note = { id: string; title: string; content: string } [@@deriving yojson]
+type note = { id: string; title: string; content: string }
 
-type notes = note list [@@deriving yojson]
-[@@@coverage on]
+type notes = note list
 
 
 let (notes_db: Sqlite3.db) = Sqlite3.db_open "notes.db"

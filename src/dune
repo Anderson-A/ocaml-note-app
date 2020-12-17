@@ -4,7 +4,7 @@
   (libraries
     core
     sqlite3)
-  (preprocess(pps ppx_deriving_yojson bisect_ppx)))
+  (preprocess(pps bisect_ppx)))
 
 (library
   (name content)
@@ -13,7 +13,7 @@
     core
     tyxml
     persistence)
-  (preprocess (pps ppx_deriving_yojson bisect_ppx)))
+  (preprocess (pps bisect_ppx)))
 
 (library
   (name controller)
@@ -22,4 +22,4 @@
     opium
     persistence
     content)
-  (preprocess (pps ppx_deriving_yojson bisect_ppx)))
+  (preprocess (pps bisect_ppx)))
