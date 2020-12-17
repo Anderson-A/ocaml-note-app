@@ -100,10 +100,11 @@ dune exec ./src/note_app.exe
 
 * Due to difficulties trying to parse an request made to my server using JSON, I
 had to use query parameters sent over the url instead. This means that notes
-cannot contain the following characters: &$+,/:;=?@#.
+cannot contain the following characters: & $ + , / : ; = ? @ #.
 * Due to the way my sql queries are formatted, notes cannot contain apostrophes
 ('). This would have to be solved by sanitizing the queries or using an object
 relation mapper such as the one provided by the `orm` library.
 * I am not sure exactly why, but newlines are not properly processed in a notes
 contents. This is either because of how I make requests to my backend containing
 the contents or is because text in sqlite cannot contain newlines.
+* The same database is used when running the app and when testing

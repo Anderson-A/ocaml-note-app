@@ -53,6 +53,15 @@ let check_table () =
     exit_with_error r msg
 
 
+let drop_table () =
+  let drop_table_sql = "DROP TABLE IF EXISTS Notes;" in
+  match Sqlite3.exec notes_db drop_table_sql with
+  | Sqlite3.Rc.OK -> ()
+  | r ->
+    let msg = "Unable to drop table Notes." in
+    exit_with_error r msg
+
+
 let gather_notes (l: notes) (data: Sqlite3.Data.t array): notes =
   let id = Sqlite3.Data.to_string_coerce data.(0) in
   let title = Sqlite3.Data.to_string_coerce data.(1) in

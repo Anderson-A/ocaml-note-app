@@ -1,0 +1,7 @@
+(executable
+  (name note_app)
+  (modules note_app)
+  (libraries
+    persistence
+    controller)
+  (preprocess (pps ppx_deriving_yojson)))

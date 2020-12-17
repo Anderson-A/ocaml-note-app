@@ -3,3 +3,4 @@
 .merlin
 .vscode
 *.db
+/_coverage/
