@@ -36,7 +36,7 @@ let gen_note_div (n: Persistence.note) =
   div ~a:[a_class ["note"]; a_id n.id] [
     p ~a:[a_class ["title"]] [a ~a:[a_href ("/notes/"^n.id)] [txt n.title]];
     p [ txt (chop_content n.content)
-      ; button ~a:[a_class ["delete_btn"]; a_onclick "delete_note(this)"] [txt "x"]]
+      ; button ~a:[a_class ["delete_btn"]; a_onclick "delete_note(this);"] [txt "x"]]
   ]
 
 
@@ -57,7 +57,7 @@ let gen_editing_div (n: Persistence.note) =
     br (); br ();
     textarea ~a:[a_id "content_input"; a_cols 50; a_rows 20] (txt n.content);
     br (); br ();
-    button ~a:[a_class ["save_btn"]] [txt "Save Note"]
+    button ~a:[a_class ["save_btn"]; a_onclick "save_note(this);"] [txt "Save Note"]
   ]
 
 

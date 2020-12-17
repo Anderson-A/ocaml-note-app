@@ -110,7 +110,7 @@ let delete_note (id: string): bool =
 
 let update_note (id: string) (title: string) (content: string): bool =
   let update_query = Printf.sprintf
-    "UPDATE Notes SET Title=%s, Content=%s WHERE NoteId=%s;"
+    "UPDATE Notes SET Title='%s', Content='%s' WHERE NoteId=%s;"
     title
     content
     id

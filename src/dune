@@ -21,7 +21,6 @@
   (libraries
     core
     opium
-    tyxml
     persistence
     content)
   (preprocess (pps ppx_deriving_yojson)))

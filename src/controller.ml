@@ -1,21 +1,6 @@
-open Core
 open Opium
-open Tyxml.Html
 open Persistence
 open Content
-
-
-let gen_html elem =
-  (html
-    (head
-      (title
-        (txt "Note app")
-      )
-      []
-    )
-    (body
-      [ elem ])
-  )
 
 
 let get_note_handler req =
@@ -43,5 +28,26 @@ let delete_note_handler req =
 
 let update_note_handler req =
   let note_id = Router.param req "id" in
+  let note_title = Request.query_exn "title" req in
+  let note_content = Request.query_exn "content" req in
+  let updated = update_note note_id note_title note_content in
+  let json_res =
+    if updated then (`Assoc [ "updated", `Bool (true)])
+    else (`Assoc [ "updated", `Bool (false)])
+  in
+  Lwt.return (Response.of_json json_res)
+
+
+(* let update_note_handler req =
+  let note_id = Router.param req "id" in
+  let json_res =
+    if (String.length note_id > 1) then (`Assoc [ "updated", `Bool (true)])
+    else (`Assoc [ "updated", `Bool (false)])
+  in
+  Lwt.return (Response.of_json json_res) *)
+
+
+(* let update_note_handler req =
+  let note_id = Router.param req "id" in
   Response.of_json (`Assoc [ "message", `String ("Note "^note_id^" saved")])
-  |> Lwt.return
+  |> Lwt.return *)
