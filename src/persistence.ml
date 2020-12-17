@@ -1,5 +1,6 @@
 open Core
 
+
 type note = { id: string; title: string; content: string } [@@deriving yojson]
 
 type notes = note list [@@deriving yojson]
@@ -60,13 +61,13 @@ let gather_notes (l: notes) (data: Sqlite3.Data.t array): notes =
   l @ [curr]
 
 
-let get_note (id: string): note =
+let get_note (id: string): note option =
   let select_query = Sqlite3.prepare
     notes_db
     (Printf.sprintf "SELECT * FROM Notes WHERE NoteId=%s;" id)
   in
   let _, queried = Sqlite3.fold select_query ~f:gather_notes ~init:[] in
-  List.hd_exn queried
+  List.hd queried
 
 
 let get_all_notes (): notes =
@@ -96,10 +97,10 @@ let delete_note (id: string): bool =
   match Sqlite3.exec notes_db delete_query with
   | Sqlite3.Rc.OK ->
     if Sqlite3.changes notes_db = 0 then (
-      Printf.printf "Note with id %s does not exist\n" id;
+      print_endline ("Note with id "^id^" does not exist");
       false
     ) else (
-      Printf.printf "Deleted note with id %s\n" id;
+      print_endline ("Deleted note with id "^id);
       true
     )
   | r ->
@@ -118,10 +119,10 @@ let update_note (id: string) (title: string) (content: string): bool =
   match Sqlite3.exec notes_db update_query with
   | Sqlite3.Rc.OK ->
     if Sqlite3.changes notes_db = 0 then (
-      Printf.printf "Note with id %s does not exist\n" id;
+      print_endline ("Note with id "^id^" does not exist");
       false
     ) else (
-      Printf.printf "Updated note with id %s\n" id;
+      print_endline ("Updated note with id "^id);
       true
     )
   | r ->

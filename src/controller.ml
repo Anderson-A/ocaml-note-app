@@ -6,8 +6,11 @@ open Content
 let get_note_handler req =
   let note_id = Router.param req "id" in
   let fetched_note = get_note note_id in
-  let html_content = note_page fetched_note in
-  Lwt.return (Response.of_html ~indent:true html_content)
+  match fetched_note with
+  | Some n ->
+    let html_content = note_page n in
+    Lwt.return (Response.of_html ~indent:true html_content)
+  | None -> Lwt.return (Response.of_html ~indent:true (page_404 ()))
 
 
 let get_all_notes_handler _ =

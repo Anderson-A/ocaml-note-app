@@ -18,10 +18,13 @@
     (tyxml (>= 4.4.0))
     (ppx_deriving_yojson (>= 3.6.1))
     (sqlite3 (>= 5.0.2))
+    (bisect_ppx (>= 2.5.0))
 
 
     (merlin :dev)
     (utop :dev)
     (ocp-indent :dev)
+
+    (ounit2 :with-test)
   )
 )

@@ -83,9 +83,27 @@ sudo apt install libev-dev libsqlite3-dev
 opam install . --deps-only
 ```
 
+If you'd like to be able to run the tests, then do:
+
+```bash
+opam install . --deps-only --with-test
+```
+
 To run the app, build and execute it and then go to `localhost:3000`
 
 ```bash
 dune build
 dune exec ./src/note_app.exe
 ```
+
+### Known Issues
+
+* Due to difficulties trying to parse an request made to my server using JSON, I
+had to use query parameters sent over the url instead. This means that notes
+cannot contain the following characters: &$+,/:;=?@#.
+* Due to the way my sql queries are formatted, notes cannot contain apostrophes
+('). This would have to be solved by sanitizing the queries or using an object
+relation mapper such as the one provided by the `orm` library.
+* I am not sure exactly why, but newlines are not properly processed in a notes
+contents. This is either because of how I make requests to my backend containing
+the contents or is because text in sqlite cannot contain newlines.

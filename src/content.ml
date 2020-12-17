@@ -70,3 +70,10 @@ let note_page (n: Persistence.note) =
     div ~a:[a_class ["content"]] [ editing_div ]
   in
   layout [main_script; main_header; content_div]
+
+let page_404 _ =
+  let open Html in
+  let content_div =
+    div ~a:[a_class ["content"]] [ txt "Note does not exist" ]
+  in
+  layout [main_script; main_header; content_div]
