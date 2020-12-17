@@ -1,9 +1,10 @@
 open Core
 
-
+[@@@coverage off]
 type note = { id: string; title: string; content: string } [@@deriving yojson]
 
 type notes = note list [@@deriving yojson]
+[@@@coverage on]
 
 
 let (notes_db: Sqlite3.db) = Sqlite3.db_open "notes.db"
@@ -15,7 +16,7 @@ let exit_with_error (error: Sqlite3.Rc.t) (msg: string): unit =
   print_endline msg;
   let _ = Sqlite3.db_close notes_db in
   print_endline "Exiting";
-  exit 1
+  exit 1 [@@coverage off]
 
 
 let create_notes_table (): unit =
@@ -27,7 +28,7 @@ let create_notes_table (): unit =
   in
   match Sqlite3.exec notes_db create_table_sql with
   | Sqlite3.Rc.OK -> ()
-  | r -> 
+  | r ->
     let msg = "Unable to create table Notes." in
     exit_with_error r msg
 
@@ -96,9 +97,9 @@ let create_note (title: string) (content: string): bool * int =
     print_endline "Inserted note";
     (true, Int64.to_int_exn (Sqlite3.last_insert_rowid notes_db))
   | r ->
-    print_endline (Sqlite3.Rc.to_string r);
-    print_endline (Sqlite3.errmsg notes_db);
-    (false, -1)
+    print_endline (Sqlite3.Rc.to_string r) [@coverage off];
+    print_endline (Sqlite3.errmsg notes_db) [@coverage off];
+    (false, -1) [@coverage off]
 
 
 let delete_note (id: string): bool =
@@ -113,9 +114,9 @@ let delete_note (id: string): bool =
       true
     )
   | r ->
-    print_endline (Sqlite3.Rc.to_string r);
-    print_endline (Sqlite3.errmsg notes_db);
-    false
+    print_endline (Sqlite3.Rc.to_string r) [@coverage off];
+    print_endline (Sqlite3.errmsg notes_db) [@coverage off]; 
+    false [@coverage off]
 
 
 let update_note (id: string) (title: string) (content: string): bool =
@@ -135,6 +136,6 @@ let update_note (id: string) (title: string) (content: string): bool =
       true
     )
   | r ->
-    print_endline (Sqlite3.Rc.to_string r);
-    print_endline (Sqlite3.errmsg notes_db);
-    false
+    print_endline (Sqlite3.Rc.to_string r) [@coverage off];
+    print_endline (Sqlite3.errmsg notes_db) [@coverage off];
+    false [@coverage off]
