@@ -19,7 +19,6 @@
   (name controller)
   (modules controller)
   (libraries
-    core
     opium
     persistence
     content)

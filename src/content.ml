@@ -10,7 +10,7 @@ let main_script =
 let main_header =
   let open Html in
   div ~a:[a_class ["header"]] [
-    h1 [txt "OCaml Notes App"]
+    h1 [a ~a:[a_href ("/")] [txt "OCaml Notes App"]]
   ]
 
 
@@ -34,9 +34,11 @@ let chop_content (s: string): string =
 let gen_note_div (n: Persistence.note) =
   let open Html in
   div ~a:[a_class ["note"]; a_id n.id] [
-    p ~a:[a_class ["title"]] [a ~a:[a_href ("/notes/"^n.id)] [txt n.title]];
-    p [ txt (chop_content n.content)
-      ; button ~a:[a_class ["delete_btn"]; a_onclick "delete_note(this);"] [txt "x"]]
+    p ~a:[a_class ["title"]] [
+      a ~a:[a_href ("/notes/"^n.id)] [txt n.title];
+      button ~a:[a_class ["delete_btn"]; a_onclick "delete_note(this);"] [txt "x"]
+    ];
+    p [ txt (chop_content n.content) ]
   ]
 
 
@@ -44,7 +46,7 @@ let all_notes_page (all_notes: Persistence.notes) =
   let note_divs = List.map all_notes ~f:gen_note_div in
   let open Html in
   let content_div =
-    div ~a:[a_class ["content"]] ((button [txt "Create Note"]) :: note_divs)
+    div ~a:[a_class ["content"]] ((button ~a:[a_onclick "create_note()"] [txt "Create Note"]) :: note_divs)
   in
   layout [main_script; main_header; content_div]
 

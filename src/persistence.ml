@@ -75,20 +75,20 @@ let get_all_notes (): notes =
   queried
 
 
-let create_note (title: string) (content: string): bool =
+let create_note (title: string) (content: string): bool * int =
   let insert_query = Printf.sprintf
-    "INSERT INTO Notes (Title, Content) VALUES(%s, %s);"
+    "INSERT INTO Notes (Title, Content) VALUES('%s', '%s');"
     title
     content
   in
   match Sqlite3.exec notes_db insert_query with
   | Sqlite3.Rc.OK ->
     print_endline "Inserted note";
-    true
+    (true, Int64.to_int_exn (Sqlite3.last_insert_rowid notes_db))
   | r ->
     print_endline (Sqlite3.Rc.to_string r);
     print_endline (Sqlite3.errmsg notes_db);
-    false
+    (false, -1)
 
 
 let delete_note (id: string): bool =

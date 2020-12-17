@@ -14,6 +14,7 @@ let app: App.t =
   |> App.middleware static
   |> App.get "/notes/:id" get_note_handler
   |> App.get "/" get_all_notes_handler
+  |> App.post "/" create_note_handler
   |> App.delete "/notes/:id" delete_note_handler
   |> App.put "/notes/:id" update_note_handler
 

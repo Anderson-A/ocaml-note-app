@@ -16,6 +16,17 @@ let get_all_notes_handler _ =
   Lwt.return (Response.of_html ~indent:true html_content)
 
 
+let create_note_handler req =
+  let note_title = Request.query_exn "title" req in
+  let note_content = Request.query_exn "content" req in
+  let created, row_id = create_note note_title note_content in
+  let json_res =
+    if created then (`Assoc [ ("created", `Bool (true)); ("id", `Int row_id)])
+    else (`Assoc [ ("updated", `Bool (false)); ("id", `Int row_id)])
+  in
+  Lwt.return (Response.of_json json_res)
+
+
 let delete_note_handler req =
   let note_id = Router.param req "id" in
   let deleted = delete_note note_id in
@@ -36,18 +47,3 @@ let update_note_handler req =
     else (`Assoc [ "updated", `Bool (false)])
   in
   Lwt.return (Response.of_json json_res)
-
-
-(* let update_note_handler req =
-  let note_id = Router.param req "id" in
-  let json_res =
-    if (String.length note_id > 1) then (`Assoc [ "updated", `Bool (true)])
-    else (`Assoc [ "updated", `Bool (false)])
-  in
-  Lwt.return (Response.of_json json_res) *)
-
-
-(* let update_note_handler req =
-  let note_id = Router.param req "id" in
-  Response.of_json (`Assoc [ "message", `String ("Note "^note_id^" saved")])
-  |> Lwt.return *)

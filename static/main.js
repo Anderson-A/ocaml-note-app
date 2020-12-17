@@ -36,3 +36,20 @@ async function save_note(elem) {
       }
     });
 }
+
+async function create_note() {
+  let note_title = "New Note";
+  let note_content = " ";
+
+  let url = "http://localhost:3000/" + "?title=" + note_title + "&content=" + note_content;
+
+    fetch(url, {method: 'POST'})
+    .then(response => response.json())
+    .then(data => {
+      if (data["created"]) {
+        location.reload();
+      } else {
+        alert("Error when trying to create note");
+      }
+    });
+}
