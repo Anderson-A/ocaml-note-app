@@ -3,7 +3,7 @@ open OUnit2
 open Persistence
 
 
-let test_server_and_db _ =
+let test_db _ =
   (* Start with a clean table *)
   drop_table ();
   check_table ();
@@ -128,7 +128,7 @@ let test_server_and_db _ =
 
 let database_tests =
   "Database Tests" >: test_list [
-    "Database Tests" >:: test_server_and_db;
+    "Database Tests" >:: test_db;
   ]
 
 
